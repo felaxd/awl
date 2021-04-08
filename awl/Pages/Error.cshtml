@@ -1,0 +1,116 @@
+﻿@page "{guid}"
+@model ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+    .selected, .selected:hover {
+        background-color: blue;
+        color: white;
+    }
+
+    .hiddencol {
+        display: none;
+    }
+
+    .key {
+        width: 20%;
+        padding-left: 10px;
+    }
+
+    .val {
+        width: 80%;
+        padding-right: 10px;
+        padding-top: 3px;
+    }
+
+    .row1:hover {
+        background-color: #cac7c7;
+    }
+</style>
+<div id="prog">
+    <h4 style="text-align: center; float: left; width: 60%;">Błędy</h4>
+    <h4 style="text-align: center; margin-left: 100px; width: 30%; display: inline-block;">Podpowiedzi</h4>
+    <div id="errors" style="clear: both; float: left; width: 60%; height: 300px; overflow: auto; border: 1px black solid;">
+        <div style="display: none;" class="selected"></div>
+        <table>
+            @foreach (Error item in Model.Errors_list)
+            {
+                <tr class="row1">
+                    <td class="key">@item.key</td>
+
+                    @if (item.type == "data")
+                    {
+                        <td class="val">Brak daty w arkuszu.</td>
+                    }
+                    else if (item.type == "")
+                    {
+                        <td class="val">@item.name</td>
+                    }
+                    else
+                    {
+                        <td class="val"><span class="typ">@item.type</span> - <span class="name">@item.name</span> nie istnieje w bazie danych.</td>
+}
+                    <td class="samples hiddencol">@item.samples</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div id="matches" style="margin-left: 100px;width: 30%;height: 300px;display: inline-block;overflow: auto;"></div>
+    <div style="margin: 20px 0;">@Model.Errors - błędów w arkuszu.</div>
+
+    <div>
+        <h2>Szybkie dodawanie do bazy</h2>
+        <form method="post">
+            <label style="width: 200px;" id="label_type">Nazwa/Nazwisko:</label><input asp-for="Input" name="input" id="input_name" /><label style="margin: 10px;">Typ:</label><select asp-for="Type" name="type" id="sel_type"><option value="grupa">Grupa</option><option value="prowadzacy">Prowadzący</option></select><input type="submit" value="Dodaj" style="margin-left: 20px;" class="btn btn-primary" />
+        </form>
+        @if (Model.Dodano != "" && Model.Dodano != "true")
+        {
+            <div style="color: #4caf50; font-weight: bold;">@Model.Dodano</div>
+        }
+    </div>
+    <div>
+        <a href="/Logout" class="btn btn-logout">Wyloguj</a>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on('click', '.row1', function () {
+                showMatches(this);
+                db_select(this);
+            });
+        });
+        function showMatches(div1) {
+            var div2 = div1;
+            document.getElementsByClassName("selected")[0].classList.add("row1");
+            document.getElementsByClassName("selected")[0].classList.remove("selected");
+            var id = div2.getElementsByClassName("samples")[0].innerHTML;
+            document.getElementById("matches").innerHTML = "";
+            var id = id + "";
+            var a = id.split(",");
+            for (var match of a) {
+                var div = "<div>" + match + "</div>"
+                document.getElementById("matches").innerHTML += div;
+            }
+            div2.classList.add("selected");
+            div2.classList.remove("row1");
+        }
+        function db_select(div1) {
+            var div2 = div1;
+            var type = div2.getElementsByClassName("typ")[0].innerHTML;
+            var name = div2.getElementsByClassName("name")[0].innerHTML;
+            var type = type + "";
+            var name = name + "";
+            if (type == "grupa") {
+                document.getElementById("label_type").innerHTML = "Nazwa:";
+                document.getElementById("sel_type").options[1].selected = '';
+                document.getElementById("sel_type").options[0].selected = 'selected';
+            } else if (type == "prowadzacy") {
+                document.getElementById("label_type").innerHTML = "Nazwisko:";
+                document.getElementById("sel_type").options[0].selected = '';
+                document.getElementById("sel_type").options[1].selected = 'selected';
+            }
+            document.getElementById("input_name").value = name;
+        }
+    </script>
+</div>

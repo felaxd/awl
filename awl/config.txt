@@ -1,0 +1,7 @@
+[SQL SERVER]
+server=localhost
+port=3306
+login=root
+password=
+database=plan
+database_err=err_tmp

@@ -1,0 +1,28 @@
+﻿@page
+@model awl.Pages.Adm.IndexModel
+@{
+    ViewData["Title"] = "Panel Administracyjny";
+}
+<style>
+    textarea {
+        width: 500px;
+        height: 200px;
+        resize: both;
+        float: left;
+        margin: 0 20px 20px 20px;
+    }
+
+</style>
+<div id="body_content">
+    <form asp-page-handler="Update" method="post">
+        <textarea name="config" asp-for="Config"></textarea>
+        <input style="clear: both;" type="submit" class="btn btn-primary"/>
+    </form>
+    @if (Model.Dodano == "true")
+    {
+        <div style="color: #4caf50; font-weight: bold;">Zapisano...</div>
+    }
+</div>
+<div>
+    <a href="/Logout" class="btn btn-logout">Wyloguj</a>
+</div>

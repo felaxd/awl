@@ -1,0 +1,40 @@
+﻿@page
+@model awl.Pages.Login.IndexModel
+@{
+    ViewData["Title"] = "Logowanie";
+}
+<style>
+    .form {
+        border: black 1px solid;
+        width: 300px;
+        margin: 0 auto;
+        padding: 10px;
+    }
+    .input {
+        margin: 0 auto;
+        display: table;
+    }
+    .input label {
+        margin: 10px;
+        font-weight: bold;
+    }
+
+</style>
+<div id="body_content">
+    <div style="margin: 0 auto; display: table;">
+        <span style="font-weight: bold; font-size: 20px;">Wersja testowa, login: <span style="color: red;">admin</span>, hasło: <span style="color: red;">admin</span></span>
+    </div>
+    <div class="form">
+        <form method="post">
+            <div class="input"><label>Login:</label><input asp-for="Login" name="login" value="admin"/></div>
+            <div class="input"><label>Hasło:</label><input asp-for="Password" name="password" type="password" value="admin"/></div>
+            <div><input style="margin: 0 auto; display: block;" type="submit" class="btn btn-primary" /></div>
+        </form>
+        @if(Model.Err_login == 1)
+            {
+                <div>
+                    <span style="color: red; font-weight: bold;">Podano błędny login lub hasło.</span>
+                </div>
+            }
+    </div>
+</div>

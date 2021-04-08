@@ -1,0 +1,77 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Wybór pliku";
+}
+<style>
+    h2 {
+        padding: 0 0 20px 20px;
+    }
+    #loader {
+        display: none;
+        position: absolute;
+        margin-top: 4px;
+        margin-left: 20px;
+    }
+</style>
+<div id="body_content">
+    @if (!Model.Connected)
+    {<h3 style="color: red;">Błąd połączenia z bazą danych. Spróbuj odświeżyć stronę.</h3>}
+    <h2>Wybierz plik do sprawdzenia</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input asp-for="UploadedFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+        <input onclick="loader()" type="submit" class="btn btn-primary" style="background-color: black; border-color: black;" />
+        @if (!Model.IsUploaded)
+         {
+            <div id="loader" class="spinner-grow text-dark" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+         } 
+    </form>
+
+    @{
+        if (Model.IsUploaded)
+        {
+        <div id="sel">
+            <hr />
+            <h4 id="select">Konfiguruj</h4>
+            <div>Wybrany plik: @Model.Nazwa_pliku</div>
+            <form asp-page-handler="Spr" method="post">
+                <input type="hidden" asp-for="File_guid" name="file_guid" value="@Model.File_guid" />
+                <input type="hidden" asp-for="File_name" name="file_name" value="@Model.File_name" />
+                <label>Arkusz: </label>
+                <select asp-for="Selected_sheet" name="selected_sheet" asp-items="Model.worksheets" onchange="set_mo(this)"></select>
+                @*<div id="config" style="margin-top: 20px; display: table;">
+            <label>Rok: </label><input type="number" value="@DateTime.Now.Year" /><label style="margin-left: 30px;">Miesiąc: </label><input id="month" type="number" value="1" />
+        </div>*@
+                <br />
+
+                <button onclick="loader()" class="btn btn-primary">
+                    Sprawdź arkusz
+                </button>
+                <div id="loader" class="spinner-grow text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </form>
+            <!--<progress max="100" value="@Model.Status"></progress>-->
+        </div>
+        }
+        else
+        {
+            <hr />
+            <h2>LUB</h2>
+            <div>
+                <a href="/Publish" class="btn btn-primary">Przejdź do strony publikacji planu</a>
+            </div>
+        }
+    }
+</div>
+<div>
+    <a href="/Logout" class="btn btn-logout">Wyloguj</a>
+</div>
+
+<script type="text/javascript">
+    function loader() {
+        document.getElementById("loader").style.display = "inline-block";
+    }
+</script>
