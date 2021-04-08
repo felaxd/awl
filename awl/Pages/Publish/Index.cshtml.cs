@@ -188,7 +188,7 @@ namespace awl.Pages.Publish
                         Console.WriteLine(string.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}", range[0], range[1], range[2], range[3], range[4], range[5], range[6], range[7]));
                         string[] info = { Convert.ToString(dzien_sql.Replace(".", "") + "/" + (Convert.ToInt32(range[8]) - 4 - excel.rows_to_start) + "/" + godziny), dzien_sql, range[0], range[1], range[2], range[3], godziny.ToString(), range[4], range[5], range[7] };
                         //                                                                                                                  code                data        name       info   lecturer   room       start_hour       lenght    groups       type
-                        database.addToDatabase(info, "zajecia");
+                        if(info[8] != "") database.addToDatabase(info, "zajecia");
                         wiersz = Convert.ToInt32(range[8]);
                         //Console.ReadKey();
                     }
