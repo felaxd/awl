@@ -131,7 +131,29 @@ namespace awl.Pages.Publish
                 {
                     for (int j = i; j < i + len; j++) if (!rows_excluded.Contains(j)) rows_excluded.Add(j);
                 }
-                if (string.Join("|", groups_names).Replace(" ", "") != "" && string.Join("|", groups_names).Replace(" ", "") != ws.Cells[starting_point[0] + 1, starting_point[1]].Text.Replace("  ", " ")) groups.Add(i, string.Join("|", groups_names).Trim().Replace(" ", "_"));
+                if (len > 3) {
+                    for (int g = 1; g <= (len / 3); g++)
+                    {
+
+                        if (string.Join("|", groups_names).Replace(" ", "") != "" && string.Join("|", groups_names).Replace(" ", "") != ws.Cells[starting_point[0] + 1, starting_point[1]].Text.Replace("  ", " "))
+                        {
+                            string group_name = string.Join("|", groups_names).Trim().Replace(" ", "_");
+                            group_name.Replace("01/D", "");
+                            group_name.Replace("02/D", "");
+                            group_name.Replace("03/D", "");
+                            group_name.Replace("04/D", "");
+                            group_name += "_0" + g + "/D";
+                            int ad = i + (3 * (g - 1));
+                            groups.Add(ad, group_name);
+                        }
+
+                    }
+                } else
+                {
+                    if (string.Join("|", groups_names).Replace(" ", "") != "" && string.Join("|", groups_names).Replace(" ", "") != ws.Cells[starting_point[0] + 1, starting_point[1]].Text.Replace("  ", " "))
+                        groups.Add(i, string.Join("|", groups_names).Trim().Replace(" ", "_"));
+                }
+
                 groups_names.Clear();
                 i = first_row;
             }
